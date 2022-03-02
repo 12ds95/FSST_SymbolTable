@@ -28,7 +28,7 @@ class SymbolTable:
   def findLongestSymbol(self, text):
     letter = ord(text[0])
     # try all symbols that start with this letter
-    for code in range(self.sIndex[letter],self.sIndex[letter+1]): # what if self.sIndex[letter+1] == 0 ...
+    for code in range(self.sIndex[letter],self.sIndex[letter+1]):
       if text.find(self.symbols[code]) != -1: 
         return code # symbol, code >= 256
     return letter # non-symbol byte (will be escaped)
@@ -101,34 +101,31 @@ class SymbolTable:
     return self
 
 if __name__ == "__main__":
-    # run test case in paper
+    # run test case in paper section 4.2
     MAX_SYM_LENGTH = 3
     text = "tumcwitumvldb"
     res = SymbolTable()
     res.buildSymbolTable(text)
     print(res.symbols[256:])
     
-    count1 = [0]*512
-    count2 = [[0]*512 for i in range(512)]
     pos = 0
     prev = None
+    encoded_text = "|"
     while True:
       code = res.findLongestSymbol(text[pos:])
       # count the frequencies
-      count1[code] += 1
       if prev != None:
-        count2[prev][code] += 1
         s = (res.symbols[prev]+ res.symbols[code])[:MAX_SYM_LENGTH] 
-        print("prev={}: code={}, concat_str={}".format(res.symbols[prev], res.symbols[code], s))
+        print("prev={}: code={}, candidate_concat_str={}".format(res.symbols[prev], res.symbols[code], s))
       else:
         print("prev=None: code={}".format(res.symbols[code]))
       if code >= 256 and prev != None:
         nextByte = ord(text[pos]) 
-        count1[nextByte] += 1
-        count2[prev][nextByte] += 1
         s = (res.symbols[prev]+ res.symbols[nextByte])[:MAX_SYM_LENGTH] 
-        print("Additionl byte and concat: prev={}, nextByte={}, concat_str={}".format(res.symbols[prev], res.symbols[nextByte], s))
+        print("Additionl byte and candidate_concat_str: prev={}, nextByte={}, concat_str={}".format(res.symbols[prev], res.symbols[nextByte], s))
       prev = code
       pos += len(res.symbols[code])
+      encoded_text = encoded_text + res.symbols[code] + '|'
       if pos == len(text):
         break
+    print("encoded text: {}".format(encoded_text))
