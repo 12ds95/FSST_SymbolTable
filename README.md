@@ -3,7 +3,7 @@ Algorithm 3 is a simplified Python-style pseudo code for bottom-up symbol table 
 ```
 python symTab.py
 ```
-will produce a symbol table for the example corpus “tumcwitumvldb” mentioned in section 4.2, and show the details of corpus matching(compressing) in the last iteration.
+will produce a symbol table for the example corpus “tumcwitumvldb” mentioned in section 4.2, and show the detail of symbols counting and corpus matching(compressing) in the last iteration.
 
 ## About FSST
 Fast Static Symbol Table (FSST): fast text compression that allows random access 
