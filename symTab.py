@@ -62,7 +62,7 @@ class SymbolTable:
     for code1 in range(0,256+self.nSymbols):
       # single symbols (+all bytes 0..255) are candidates
       gain = len(self.symbols[code1]) * count1[code1]
-      cands[self.symbols[code1]] = 1 if code1 < 256 and gain == 0 else gain # single charater gains at least 1
+      cands[self.symbols[code1]] = 1 if len(self.symbols[code1]) == 1 and gain == 0 else gain # single charater gains at least 1
       for code2 in range(0,256+self.nSymbols):
         # concatenated symbols are also candidates
         s = (self.symbols[code1] + self.symbols[code2])[:MAX_SYM_LENGTH] 
@@ -93,11 +93,12 @@ class SymbolTable:
     return self
 
   def buildSymbolTable(self, text): # top-level entry point 
-    for _ in range(5):
+    for generation in range(5):
       count1 = [0]*512
       count2 = [[0]*512 for i in range(512)]
       self.compressCount(count1, count2, text) 
       self.makeTable(count1, count2)
+      print("#{} symbol_table={}".format(generation, self.symbols[256:]))
     return self
 
 if __name__ == "__main__":
@@ -106,7 +107,6 @@ if __name__ == "__main__":
     text = "tumcwitumvldb"
     res = SymbolTable()
     res.buildSymbolTable(text)
-    print(res.symbols[256:])
     
     pos = 0
     prev = None
