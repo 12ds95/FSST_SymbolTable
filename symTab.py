@@ -62,7 +62,7 @@ class SymbolTable:
     for code1 in range(0,256+self.nSymbols):
       # single symbols (+all bytes 0..255) are candidates
       gain = len(self.symbols[code1]) * count1[code1]
-      cands[self.symbols[code1]] = 1 if gain == 0 else gain # single charater gains at least 1
+      cands[self.symbols[code1]] = 1 if code1 < 256 and gain == 0 else gain # single charater gains at least 1
       for code2 in range(0,256+self.nSymbols):
         # concatenated symbols are also candidates
         s = (self.symbols[code1] + self.symbols[code2])[:MAX_SYM_LENGTH] 
